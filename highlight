@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby -w
+
+require 'optparse'
+
+def red(w)
+  "\e[1m\e[31m#{w}\e[39m\e[22m"
+end
+
+def green(w)
+  "\e[1m\e[32m#{w}\e[39m\e[22m"
+end
+
+def blue(w)
+  "\e[1m\e[34m#{w}\e[39m\e[22m"
+end
+
+def yellow(w)
+  "\e[1m\e[33m#{w}\e[39m\e[22m"
+end
+
+def inverse(w)
+  "\e[7m#{w}\e[39m\e[27m"
+end
+
+options = {}
+opt_parser = OptionParser.new do |opts|
+  opts.banner = "Highlights word from STDIN using ANSI color codes.\n"
+  opts.banner << "Usage: highlight [options]\nOptions:"
+
+  opts.on("-r", "--red [WORD]", "Makes WORD red") do |w|
+    options[:red] ||= []
+    options[:red] << w
+  end
+
+  opts.on("-g", "--green [WORD]", "Makes WORD green") do |w|
+    options[:green] ||= []
+    options[:green] << w
+  end
+
+  opts.on("-b", "--blue [WORD]", "Makes WORD blue") do |w|
+    options[:blue] ||= []
+    options[:blue] << w
+  end
+
+  opts.on("-y", "--yellow [WORD]", "Makes WORD yellow") do |w|
+    options[:yellow] ||= []
+    options[:yellow] << w
+  end
+
+  opts.on("-i", "--inverse [WORD]", "Inverses foreground & background colors of WORD") do |w|
+    options[:inverse] ||= []
+    options[:inverse] << w
+  end
+
+  opts.on("-h", "--help", "Prints this help") do
+    puts opts
+    exit
+  end
+end
+opt_parser.parse!
+
+begin
+  while line = $stdin.readline
+    [:red, :green, :blue, :yellow, :inverse].each do |color|
+      (options[color]|| []).each do |w|
+        line.gsub!(Regexp.new(w)) {|m| send(color, m)}
+      end
+    end
+
+    puts line
+  end
+rescue EOFError
+end
