@@ -19,8 +19,16 @@ Options:
 ### Examples
 
 ```
-cat somefile | highlight -r word1 # Will make word1 red
-cat somefile | highlight -b word2 # Will make word2 blue
-cat somefile | highlight -g word3 -y word4 # Will make word3 green an word4 yellow
-cat somefile | highlight -r word1 -r word2 # will make word1 and word2 red
+cat README.md | highlight -r word1 # Will make word1 red
+cat README.md | highlight -b word2 # Will make word2 blue
+cat README.md | highlight -i word2 # Will inverse the colors of word2
+cat README.md | highlight -g word3 -y word4 # Will make word3 green and word4 yellow
+cat README.md | highlight -r word1 -r word2 # Will make word1 and word2 red
+```
+
+It's also possible to use regular expressions for the matches.
+
+```
+cat README.md | highlight -r "word1|word2" # Will make word1 and word2 red 
+cat README.md | highlight -g "word[12]" # Will make word1 and word2 green 
 ```
